@@ -3,49 +3,40 @@ const { InjectorBalancer, errors } = require("./InjectorBalancer");
 
 describe("class InjectorBalancer", () => {
   describe("getWorkingInjectors()", () => {
-    it("should return 0 when all injectors are working", () => {
+    it("should return 3 when all injectors are working", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(0);
-      const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(0),
+        new Injector(0)
       );
 
       expect(injectorBalancer.getWorkingInjectors()).toBe(3);
     });
 
-    it("should return 1 when one injectors is at full damage", () => {
+    it("should return 2 when one of the injectors is at full damage", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(0);
-      const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(0),
+        new Injector(100)
       );
 
       expect(injectorBalancer.getWorkingInjectors()).toBe(2);
     });
 
-    it("should return 3 when two injectors are at full damage", () => {
+    it("should return 0 when two injectors are at full damage", () => {
       const sol = 100;
-      const injector1 = new Injector(100);
-      const injector2 = new Injector(100);
-      const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(100),
+        new Injector(100),
+        new Injector(100)
       );
 
       expect(injectorBalancer.getWorkingInjectors()).toBe(0);
@@ -55,15 +46,12 @@ describe("class InjectorBalancer", () => {
   describe("getMean()", () => {
     it("should perform mean calculation if all engines are working", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(0);
-      const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(0),
+        new Injector(0)
       );
 
       expect(injectorBalancer.getMean()).toBe(100);
@@ -71,15 +59,11 @@ describe("class InjectorBalancer", () => {
 
     it("should exclude broken engine from mean calculation", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(0);
-      const injector3 = new Injector(100);
-
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(0),
+        new Injector(100)
       );
 
       expect(injectorBalancer.getMean()).toBe(100);
@@ -87,15 +71,12 @@ describe("class InjectorBalancer", () => {
 
     it("should exclude 2 broken engines from mean calculation", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(100);
-      const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(100),
+        new Injector(100)
       );
 
       expect(injectorBalancer.getMean()).toBe(100);
@@ -103,15 +84,12 @@ describe("class InjectorBalancer", () => {
 
     it("should return 'Unable to comply' when all engines are broken", () => {
       const sol = 100;
-      const injector1 = new Injector(100);
-      const injector2 = new Injector(100);
-      const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(100),
+        new Injector(100),
+        new Injector(100)
       );
 
       expect(injectorBalancer.getMean()).toBe(errors.ERROR_UNABLE_TO_COMPLY);
@@ -121,15 +99,12 @@ describe("class InjectorBalancer", () => {
   describe("calculateSurplus()", () => {
     it("should return 0 surplus needed when all engines are intact", () => {
       const sol = 100;
-      const injector1 = new Injector(0);
-      const injector2 = new Injector(0);
-      const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
-        injector1,
-        injector2,
-        injector3,
-        sol
+        sol,
+        new Injector(0),
+        new Injector(0),
+        new Injector(0)
       );
 
       expect(injectorBalancer.calculateSurplus()).toBe(0);
@@ -145,10 +120,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([100, 100, 100]);
@@ -161,10 +136,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([90, 90, 90]);
@@ -177,10 +152,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([30, 30, 30]);
@@ -193,10 +168,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([90, 100, 110]);
@@ -209,10 +184,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([120, 120, 0]);
@@ -225,10 +200,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([150, 150, 150]);
@@ -241,10 +216,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(30);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOptimizedFlow()).toEqual([150, 150, 120]);
@@ -257,10 +232,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(40);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(() => injectorBalancer.getOptimizedFlow()).toThrowError(
@@ -277,10 +252,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual("Infinite");
@@ -293,10 +268,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual("Infinite");
@@ -309,10 +284,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual("Infinite");
@@ -326,10 +301,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual(
@@ -345,10 +320,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(100);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual(
@@ -364,10 +339,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual(
@@ -383,10 +358,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(30);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual(
@@ -402,10 +377,10 @@ describe("class InjectorBalancer", () => {
       const injector3 = new Injector(40);
 
       const injectorBalancer = new InjectorBalancer(
+        sol,
         injector1,
         injector2,
-        injector3,
-        sol
+        injector3
       );
 
       expect(injectorBalancer.getOperatingTime()).toEqual(

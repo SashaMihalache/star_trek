@@ -2,9 +2,9 @@ const ERROR_UNABLE_TO_COMPLY = "Unable to comply";
 const MAX_FLOW = 200;
 
 class InjectorBalancer {
-  constructor(injector1, injector2, injector3, speedOfLight) {
+  constructor(speedOfLight, ...injectors) {
     this.speedOfLight = speedOfLight;
-    this.injectors = [injector1, injector2, injector3];
+    this.injectors = [...injectors];
     this.surplus = this.calculateSurplus();
   }
 
