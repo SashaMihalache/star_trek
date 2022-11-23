@@ -1,58 +1,46 @@
 # Enterprise's warp-drive mgmt software
 
-## How to install
+## Author
 
-In order to install the Jest assertion library in the workspace, run:
+[Sebastian Mihalache](https://github.com/SashaMihalache)
 
-```
-  yarn install
-```
+## Project setup instructions
 
-Afterwards, to run tests, I've setup a command in the `package.json` file which can be ran with:
+In order to run, we must first install the Jest assertion library in the workspace:
 
 ```
-  yarn test
+  npm i
 ```
 
-3 injectors
+## Code explanation
 
-reactors needs a flow of 300 mg/s for SOL 100%
+The code is split into two main classes:
 
-1 injector = 100 mg/s. (if max -> indefinately)
-max is 199 mg/s
-every mg/s > 100 -> loses 1min (60s) of runtime  
- ex. 101 -> 99 min
-ex. 199 -> 1 min
-ex. 150 -> 50min
+1. `Injector` which represents a single Injector and is tasked with holding its own state like `damage` and `health`
+2. `InjectorBalance` which ties the desired Speed of light with an array of `Injector`s and performs all necessary calculations to arrive at an optimal flow speed and the operating time
 
-1 point of damage -> -1 mg/s
-ex. 70% damage out of 100 -> peak at 30mg/s
-32% damage out of 100 -> peak at 68mg/s
-100% damage out of 100 -> 'unusable'
-20% damage out of 178 (extra injection) -> 199 (ala de sus) -> 1 min
+<br />
 
-Pseudocode
-1 injector -> default 100 injection flow
-extraInjection 0 <> 99
-damage 0 - 100
+### Running the tests
 
-inputs: damageI1, damageI2, damageI3, percentage SOL
-output: i1Injection, i2Injection, i3Injection
+To run tests, I've setup a command in the `package.json` file which can be ran with:
 
-if i1Inj + i2Inj + i3Inj = 3000 => 100 SOL
+```
+  npm test
+```
 
-I'll start testing out one injector, then the balancer and afterwards adding N injectors
+**Note 1**: Each one of the classes are tested against various inputs + the inputs provided in the problem
+<br/>
+**Note 2**: this is running jest with the `--coverage` flag in order to generate a coverage report
 
-<!-- cum sa faci pe toate sa crape deodata -->
+<br />
 
-postDamagePeakFlow -> 80 90 100
-SOL - 100%
+### Running standalone
 
----
+I wrote an extra script in the `package.json` that runs the whole integration in a terminal-based app, prompting you for four inputs: `Speed of Light`, `Injector Damage 1`, `Injector Damage 2` & `Injector Damage 3` which replicate the test cases.
 
-SOL > mean (90) -> 10% surpluss
+In order to run it in a terminal, type:
 
-0 0 100% -> 100 100 0(unusable)
-SOL - 80% = (100 + 100 + 0) / 3
-x . y . z
-120 120 0
+```
+  npm start
+```

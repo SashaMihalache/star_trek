@@ -293,7 +293,7 @@ describe("class InjectorBalancer", () => {
       expect(injectorBalancer.getOperatingTime()).toEqual("Infinite");
     });
 
-    it("should return Infinite for case 4", () => {
+    it("should return 90 minutes for case 4", () => {
       const expectedOperatingTime = "90 minutes";
       const sol = 100;
       const injector1 = new Injector(20);
@@ -312,7 +312,7 @@ describe("class InjectorBalancer", () => {
       );
     });
 
-    it("should return Infinite for case 5", () => {
+    it("should return 80 minutes for case 5", () => {
       const expectedOperatingTime = "80 minutes";
       const sol = 80;
       const injector1 = new Injector(0);
@@ -331,7 +331,7 @@ describe("class InjectorBalancer", () => {
       );
     });
 
-    it("should return Infinite for case 6", () => {
+    it("should return 50 minutes for case 6", () => {
       const expectedOperatingTime = "50 minutes";
       const sol = 150;
       const injector1 = new Injector(0);
@@ -350,7 +350,7 @@ describe("class InjectorBalancer", () => {
       );
     });
 
-    it("should return Infinite for case 7", () => {
+    it("should return 50 minutes for case 7", () => {
       const expectedOperatingTime = "50 minutes";
       const sol = 140;
       const injector1 = new Injector(0);
@@ -369,12 +369,31 @@ describe("class InjectorBalancer", () => {
       );
     });
 
-    it("should return Infinite for case 8", () => {
+    it("should return 0 minutes for case 8", () => {
       const expectedOperatingTime = "0 minutes";
       const sol = 170;
       const injector1 = new Injector(20);
       const injector2 = new Injector(50);
       const injector3 = new Injector(40);
+
+      const injectorBalancer = new InjectorBalancer(
+        sol,
+        injector1,
+        injector2,
+        injector3
+      );
+
+      expect(injectorBalancer.getOperatingTime()).toEqual(
+        expectedOperatingTime
+      );
+    });
+
+    it("should return 1 minutes if no damage but 199% Speed of light", () => {
+      const expectedOperatingTime = "1 minutes";
+      const sol = 199;
+      const injector1 = new Injector(0);
+      const injector2 = new Injector(0);
+      const injector3 = new Injector(0);
 
       const injectorBalancer = new InjectorBalancer(
         sol,
